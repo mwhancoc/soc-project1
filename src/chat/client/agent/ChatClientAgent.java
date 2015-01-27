@@ -104,6 +104,8 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 		broadcast.setAction("jade.demo.chat.SHOW_CHAT");
 		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
 		context.sendBroadcast(broadcast);
+		
+	
 	}
 
 	protected void takeDown() {
@@ -163,15 +165,23 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 						if(p instanceof Joined) {
 							Joined joined = (Joined) p;
 							List<AID> aid = (List<AID>) joined.getWho();
-							for(AID a : aid)
+							for(AID a : aid){
 								participants.add(a);
+								// added comment next line to notify when joined
+								notifySpoken(a.getLocalName(), " has entered the chat room!");
+							}
+							
 							notifyParticipantsChanged();
 						}
 						if(p instanceof Left) {
 							Left left = (Left) p;
 							List<AID> aid = (List<AID>) left.getWho();
 							for(AID a : aid)
+							{
 								participants.remove(a);
+								// added comment next line to notify when joined
+								notifySpoken(a.getLocalName(), " has just left!");
+							}
 							notifyParticipantsChanged();
 						}
 					} catch (Exception e) {
