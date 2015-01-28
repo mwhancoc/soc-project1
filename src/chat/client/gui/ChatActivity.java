@@ -53,7 +53,7 @@ import chat.client.agent.ChatClientInterface;
  * This activity implement the chat interface.
  * Testing GitHub
  * 
- * Mike test complete
+ * Mike test complete, Test 2 of Commit and Push upstream, Test 3 of Commit and Push upstream from Andrew
  * 
  * @author Michele Izzo - Telecomitalia
  */
