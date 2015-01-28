@@ -126,6 +126,14 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 		context.sendBroadcast(broadcast);
 	}
 	
+	private void notifyChatParticipant(String speaker, String sentence) {
+		Intent broadcast = new Intent();
+		broadcast.setAction("jade.demo.chat.REFRESH_CHAT");
+		broadcast.putExtra("sentence", speaker + sentence + "\n");
+		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
+		context.sendBroadcast(broadcast);
+	}
+	
 	/**
 	 * Inner class ParticipantsManager. This behaviour registers as a chat
 	 * participant and keeps the list of participants up to date by managing the
@@ -168,7 +176,7 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 							for(AID a : aid){
 								participants.add(a);
 								// added comment next line to notify when joined
-								notifySpoken(a.getLocalName(), " has entered the chat room!");
+								notifyChatParticipant(a.getLocalName(), " has entered the chat room!");
 							}
 							
 							notifyParticipantsChanged();
@@ -180,7 +188,7 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 							{
 								participants.remove(a);
 								// added comment next line to notify when joined
-								notifySpoken(a.getLocalName(), " has just left!");
+								notifyChatParticipant(a.getLocalName(), " has just left!");
 							}
 							notifyParticipantsChanged();
 						}
