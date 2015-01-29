@@ -35,7 +35,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -86,7 +88,8 @@ public class ParticipantsActivity extends ListActivity {
 		setContentView(R.layout.participants);
 
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.participant,
-				chatClientInterface.getParticipantNames()));
+				//chatClientInterface.getParticipantNames()));
+				getModifiedParticipantNames(getContacts(), chatClientInterface.getParticipantNames())));
 
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
@@ -109,6 +112,56 @@ public class ParticipantsActivity extends ListActivity {
 
 		logger.log(Level.INFO, "Destroy activity!");
 	}
+	
+	/**
+	 * Gets and returns the name of all contacts saved on the device
+	 * 
+	 * @return the string array of contact names
+	 */
+	protected String[] getContacts() {
+		Cursor myContacts = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		String contactsList[] = new String[myContacts.getCount()];
+		
+		int i = 0;
+	
+		int nameIndex = myContacts.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);	
+
+		while(myContacts.moveToNext()) {
+
+	    		String name = myContacts.getString(nameIndex);
+	    		contactsList[i++] = name;     		
+		}
+
+		myContacts.close();
+		
+		return contactsList;
+	}
+	
+	/**
+	 * Compares the list of participants in the chat to the device's contact list
+	 * Appends [Y] to the participant name if the participant is saved as a contact,
+	 *   otherwise appends [N]
+	 * 
+	 * @param contacts the array of contact names saved in the device
+	 * @param participants the array of participants currently in the chat
+	 * @return the modified participant name appended by [Y] or [N]
+	 */
+	protected String[] getModifiedParticipantNames(String[] contacts, String[] participants) {
+		int i = 0;
+		String[] modified = new String[participants.length];
+		for(String participant : participants) {
+			String inContacts = " [N]";
+			for(String contact : contacts) {
+				if(participant.equals(contact)) {
+					inContacts = " [Y]";
+					break;
+				}							
+			}
+			modified[i++] = participant + inContacts;
+		}
+		
+		return modified;
+	}
 
 	private class MyReceiver extends BroadcastReceiver {
 		@Override
@@ -118,7 +171,8 @@ public class ParticipantsActivity extends ListActivity {
 			if (action.equalsIgnoreCase("jade.demo.chat.REFRESH_PARTICIPANTS")) {
 				setListAdapter(new ArrayAdapter<String>(
 						ParticipantsActivity.this, R.layout.participant,
-						chatClientInterface.getParticipantNames()));
+						//chatClientInterface.getParticipantNames()));
+						getModifiedParticipantNames(getContacts(), chatClientInterface.getParticipantNames())));						
 			}
 		}
 	}
