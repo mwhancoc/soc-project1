@@ -32,17 +32,23 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
+import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * This activity implement the participants interface.
@@ -99,6 +105,23 @@ public class ParticipantsActivity extends ListActivity {
 	private OnItemClickListener listViewtListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
+			// Split the participant string, original form "Tim [N]" or "Time [Y]"
+			String[] chatParticipant = ((TextView)view).getText().toString().split(" ");
+			
+			// retrieve [Y] or [N] to determine if an Android Contact
+			String isContact = chatParticipant[1];
+			
+			if(isContact.contains("N"))
+			{
+				// add to contacts
+				String givenName = chatParticipant[0];
+				String familyName = chatParticipant[0];
+				
+				
+				ContentResolver contentResolver = parent.getContext().getContentResolver();
+		
+			}
 			// TODO: A partecipant was picked. Send a private message.
 			finish();
 		}
