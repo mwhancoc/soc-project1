@@ -126,6 +126,17 @@ public class ChatClientAgent extends Agent implements ChatClientInterface {
 		context.sendBroadcast(broadcast);
 	}
 	
+	
+	/**
+	 * Send an announcement message to the chat room
+	 * 
+	 * send a chat message that announces that someone has joined  or left the
+	 * chat room when some people enters or leaves the room
+	 * 
+	 * @param String speaker, person who just joined or left the chat room
+	 * @param String sentence, "speaker" has just joined the chat room! or "speaker" has just left!
+	 * @return void
+	 */
 	private void notifyChatParticipant(String speaker, String sentence) {
 		Intent broadcast = new Intent();
 		broadcast.setAction("jade.demo.chat.REFRESH_CHAT");
