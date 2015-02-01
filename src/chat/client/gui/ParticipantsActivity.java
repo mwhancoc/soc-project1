@@ -119,7 +119,9 @@ public class ParticipantsActivity extends ListActivity {
 				String familyName = chatParticipant[0];
 				
 				
-				ContentResolver contentResolver = parent.getContext().getContentResolver();
+				//ContentResolver contentResolver = parent.getContext().getContentResolver();
+				Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
+				startActivity(intent);
 		
 			}
 			// TODO: A partecipant was picked. Send a private message.
