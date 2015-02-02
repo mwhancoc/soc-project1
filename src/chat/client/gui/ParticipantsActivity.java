@@ -23,32 +23,37 @@ Boston, MA  02111-1307, USA.
 
 package chat.client.gui;
 
-import java.util.logging.Level;
-
-import chat.client.agent.ChatClientInterface;
 import jade.core.MicroRuntime;
 import jade.util.Logger;
+//import jade.util.leap.ArrayList;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+
+import java.util.logging.Level;
+import java.util.*;
+
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
-import android.provider.Contacts.People;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import chat.client.agent.ChatClientInterface;
 
 /**
  * This activity implement the participants interface.
@@ -114,15 +119,37 @@ public class ParticipantsActivity extends ListActivity {
 			
 			if(isContact.contains("N"))
 			{
-				// add to contacts
-				String givenName = chatParticipant[0];
-				String familyName = chatParticipant[0];
-				
-				
-				//ContentResolver contentResolver = parent.getContext().getContentResolver();
-				Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
-				startActivity(intent);
-		
+				String name = chatParticipant[0];
+
+				// Add code to check if contact already exists before writing to contacts
+
+				ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+				int rawContactInsertIndex = ops.size();
+
+				ops.add(ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
+				.withValue(RawContacts.ACCOUNT_TYPE, null)
+				.withValue(RawContacts.ACCOUNT_NAME, null).build());
+
+				ops.add(ContentProviderOperation
+				.newInsert(Data.CONTENT_URI)
+				.withValueBackReference(Data.RAW_CONTACT_ID,rawContactInsertIndex)
+				.withValue(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
+				.withValue(StructuredName.DISPLAY_NAME, name) // Name of the person
+				.build());
+
+				try
+				{
+					ContentProviderResult[] res = getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+				}
+				catch (RemoteException e)
+				{
+					// error
+				}
+				catch (OperationApplicationException e)
+				{
+					// error
+				}
 			}
 			// TODO: A partecipant was picked. Send a private message.
 			finish();
