@@ -305,11 +305,14 @@ public class ChatActivity extends Activity {
 		      /**
 		       * check pre-identified locations
 		       */
+			  double fiftyMeters = 50.0;
+			  double distance;
 			  
 		      //if ebII < 50meters away set Chat Participants Latitude and Longitude to ebII's location
 		      double ebIILat = this.ebIICentennialNCSULoc.getLatitude();
 		      double ebIILng = this.ebIICentennialNCSULoc.getLongitude();
-		      if(getDistance(lat, lng, ebIILat, ebIILng) < 50)
+		      distance = getDistance(lat, lng, ebIILat, ebIILng);
+		      if(distance < fiftyMeters)
 		      {
 		    	  latLongString = "\n  @Latitude: " + ebIILat + "\n      Longitude: " + ebIILng
 		    			  			+ "\n This is EBII(Centennial)";
