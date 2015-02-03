@@ -321,7 +321,8 @@ public class ChatActivity extends Activity {
 		      //if DC
 		      double dcLat = this.washingtonDCLoc.getLatitude();
 		      double dcLng = this.washingtonDCLoc.getLongitude();
-		      if(getDistance(lat, lng, dcLat, dcLng) < 50)
+		      distance = getDistance(lat, lng, dcLat, dcLng);
+		      if(distance < fiftyMeters)
 		      {
 		    	  latLongString = "\n  @Latitude: " + dcLat + "\n      Longitude: " + dcLng
 		    			  			+ "\n This is Washington DC";
@@ -330,7 +331,8 @@ public class ChatActivity extends Activity {
 		      //if Paris
 		      double parisLat = this.parisLoc.getLatitude();
 		      double parisLng = this.parisLoc.getLongitude();
-		      if(getDistance(lat, lng, parisLat, parisLng) < 50)
+		      distance = getDistance(lat, lng, parisLat, parisLng);
+		      if(distance < fiftyMeters)
 		      {
 		    	  latLongString = "\n  @Latitude: " + parisLat + "\n      Longitude: " + parisLng
 		    			  			+ "\n This is Paris";
