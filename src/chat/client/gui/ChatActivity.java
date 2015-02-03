@@ -56,7 +56,7 @@ import chat.client.agent.ChatClientInterface;
  * Mike test complete, Test 2 of Commit and Push upstream, Test 3 of Commit and Push upstream from Andrew
  * Test 4 - Andrew
  * 
- * Test comment 2/2/2015
+ * Test comment 2/2/2015, Test two after merge fix
  * 
  * @author Michele Izzo - Telecomitalia
  */
