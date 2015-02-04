@@ -76,8 +76,10 @@ public class ChatActivity extends Activity {
 	private String nickname;
 	private ChatClientInterface chatClientInterface;
 	
+	// keeps track of Android Chat agents Latitude and Longitude
 	private String latLongLocation;
 	
+	// for the three pre-defined locations
 	private Location ebIICentennialNCSULoc;
 	private Location washingtonDCLoc;
 	private Location parisLoc;
@@ -160,7 +162,7 @@ public class ChatActivity extends Activity {
 	      };
 
 	    // Register the listener with the Location Manager to receive location updates
-	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+	    locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 	    
 	    Location location = locationManager.getLastKnownLocation(provider);
 
@@ -178,7 +180,8 @@ public class ChatActivity extends Activity {
 
 		logger.log(Level.INFO, "Destroy activity!");
 	}
-
+	
+	// when an an Android chat agent speaks append their Lat and Lgn coordinates to their chat room message
 	private OnClickListener buttonSendListener = new OnClickListener() {
 		public void onClick(View v) {
 			final EditText messageField = (EditText) findViewById(R.id.edit_message);
@@ -291,6 +294,17 @@ public class ChatActivity extends Activity {
 		alert.show();		
 	}
 	
+	/**
+	 * This code uses the AlertmeActivity.java updateWithNewLocation
+	 * as a starting point.  Each time the location listener is activated
+	 * this method determines the latitude and longitude of the Android Agent's location
+	 * and sets a string property to keep track.  If the location is within 50 meters
+	 * of any of the three defined locations the property is set to the pre-defined lat
+	 * and long values
+	 * 
+	 * @param Location location - location of the Anroid Agents device
+	 * @return void - sets an internal String property of ChatActivity.java class
+	 */
 	 private void updateWithNewLocation(Location location) {
 		    //TextView myLocationText = (TextView) findViewById(R.id.myLocationText);
 
@@ -318,7 +332,7 @@ public class ChatActivity extends Activity {
 		    			  			+ "\n This is EBII(Centennial)";
 		      }
 		    	  
-		      //if DC
+		      //DC if distance < 50meters
 		      double dcLat = this.washingtonDCLoc.getLatitude();
 		      double dcLng = this.washingtonDCLoc.getLongitude();
 		      distance = getDistance(lat, lng, dcLat, dcLng);
@@ -328,7 +342,7 @@ public class ChatActivity extends Activity {
 		    			  			+ "\n This is Washington DC";
 		      }
 		      
-		      //if Paris
+		      //Paris if distance < 50meters 
 		      double parisLat = this.parisLoc.getLatitude();
 		      double parisLng = this.parisLoc.getLongitude();
 		      distance = getDistance(lat, lng, parisLat, parisLng);
@@ -347,6 +361,7 @@ public class ChatActivity extends Activity {
 		    this.latLongLocation = latLongString;
 		  }
 	 
+	 // provided by TA for task three, determines distance in meters for two seperate sets of Lat and Lng values
 	 private static double getDistance(double lat1, double lon1, double lat2, double lon2) {
 		 final double Radius = 6371 * 1E3; //Earth's mean radius
 		 double dLat = Math.toRadians(lat2-lat1);
