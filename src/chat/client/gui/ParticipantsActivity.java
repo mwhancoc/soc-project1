@@ -99,7 +99,7 @@ public class ParticipantsActivity extends ListActivity {
 		setContentView(R.layout.participants);
 
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.participant,
-				//chatClientInterface.getParticipantNames()));
+				// Get the Participant names appended with [Y]/[N] 
 				getModifiedParticipantNames(getContacts(), chatClientInterface.getParticipantNames())));
 
 		ListView listView = getListView();
@@ -117,16 +117,15 @@ public class ParticipantsActivity extends ListActivity {
 			// retrieve [Y] or [N] to determine if an Android Contact
 			String isContact = chatParticipant[1];
 			
+			// Ensure the contact does not already exist before inserting
 			if(isContact.contains("N"))
 			{
-				String name = chatParticipant[0];
-
-				// Add code to check if contact already exists before writing to contacts
+				String name = chatParticipant[0];				
 
 				ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
 				int rawContactInsertIndex = ops.size();
-
+			
 				ops.add(ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
 				.withValue(RawContacts.ACCOUNT_TYPE, null)
 				.withValue(RawContacts.ACCOUNT_NAME, null).build());
@@ -223,7 +222,7 @@ public class ParticipantsActivity extends ListActivity {
 			if (action.equalsIgnoreCase("jade.demo.chat.REFRESH_PARTICIPANTS")) {
 				setListAdapter(new ArrayAdapter<String>(
 						ParticipantsActivity.this, R.layout.participant,
-						//chatClientInterface.getParticipantNames()));
+						// Get the chat participants appended with [Y]/[N]
 						getModifiedParticipantNames(getContacts(), chatClientInterface.getParticipantNames())));						
 			}
 		}
