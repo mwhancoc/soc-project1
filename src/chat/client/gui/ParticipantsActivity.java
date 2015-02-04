@@ -112,15 +112,14 @@ public class ParticipantsActivity extends ListActivity {
 				long id) {
 			
 			// Split the participant string, original form "Tim [N]" or "Time [Y]"
-			String[] chatParticipant = ((TextView)view).getText().toString().split(" ");
 			
+			String rawName = ((TextView)view).getText().toString();
+			String name = rawName.substring(0, rawName.length()-4);
 			// retrieve [Y] or [N] to determine if an Android Contact
-			String isContact = chatParticipant[1];
+			String isContact = rawName.substring(rawName.length()-4, rawName.length());
 			
 			// Ensure the contact does not already exist before inserting
-			if(isContact.contains("N"))
-			{
-				String name = chatParticipant[0];				
+			if(isContact.contains("N"))	{
 
 				ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 

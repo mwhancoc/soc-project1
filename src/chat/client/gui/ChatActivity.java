@@ -77,7 +77,7 @@ public class ChatActivity extends Activity {
 	private ChatClientInterface chatClientInterface;
 	
 	// keeps track of Android Chat agents Latitude and Longitude
-	private String latLongLocation;
+	private String latLongLocation = "\n  No Location found";
 	
 	// for the three pre-defined locations
 	private Location ebIICentennialNCSULoc;
